@@ -1,16 +1,56 @@
-let roster = await fetch('./data.json')
-    .then((res) => {
-        return res.json();
-    });
+let roster = await fetch("./data.json").then((res) => {
+  return res.json();
+});
 
-console.log(`Roster: ${roster}`)
+console.log(`Roster: ${roster}`);
 var flipped = false;
+var searchValue = "";
 
-const container = document.querySelector('.container');
-const playerContainer = document.querySelector('.players');
+const container = document.querySelector(".container");
+const playerContainer = document.querySelector(".players");
+// const playerList = document.getElementById("playerList");
+const search = document.getElementById("search");
 
-playerContainer.innerHTML = roster.map((player, index) => 
-    `<div id=${index} class="cardLayer1">
+// roster.forEach((player, index) => {
+//   playerList[index] = new Option(player.firstName + player.lastName, index);
+// });
+
+// search.addEventListener("change", (e) => {});
+
+search.addEventListener("input", (e) => {
+  searchValue = e.target.value;
+  search.value = searchValue;
+  if (searchValue.length === 0) {
+    for (let i = 0; i < roster.length; i++) {
+      document.getElementById(i).style = "display: block";
+    }
+  }
+  if (e.target.value) {
+    for (let i = 0; i < roster.length; i++) {
+      if (
+        !e.target.value
+          .toLowerCase()
+          .includes(roster[i].firstName.toLowerCase()) ||
+        !e.target.value.toLowerCase().includes(roster[i].lastName.toLowerCase())
+      ) {
+        document.getElementById(i).style = "display: none";
+      }
+      if (
+        e.target.value
+          .toLowerCase()
+          .includes(roster[i].firstName.toLowerCase()) ||
+        e.target.value.toLowerCase().includes(roster[i].lastName.toLowerCase())
+      ) {
+        document.getElementById(i).style = "display: block";
+      }
+    }
+  }
+});
+
+playerContainer.innerHTML = roster
+  .map(
+    (player, index) =>
+      `<div id=${index} class="cardLayer1">
         <div class="cardLayer2">
             <div class="cardLayer3">
                 <div class="cardLayer4">
@@ -68,53 +108,64 @@ playerContainer.innerHTML = roster.map((player, index) =>
             </div>
         </div>
     </div>`
-).join('');
-
+  )
+  .join("");
 
 //Changes position from abbreviated version to full
 for (let i = 0; i < roster.length; i++) {
-    if (roster[i].primaryPosition === 'P') {
-        document.getElementById(`${roster[i].id}`).innerHTML = "Position: Pitcher <box-icon name='baseball' type='solid' animation='flashing' rotate='90' ></box-icon>";
-    }
-    if (roster[i].primaryPosition === 'LF') {
-        document.getElementById(`${roster[i].id}`).innerHTML = "Position: Left Fielder <img class=svg src=./baseball-glove.svg />";
-    }
-    if (roster[i].primaryPosition === 'RF') {
-        document.getElementById(`${roster[i].id}`).innerHTML = "Position: Right Fielder <img class=svg src=./baseball-glove.svg />";
-    }
-    if (roster[i].primaryPosition === '2B') {
-        document.getElementById(`${roster[i].id}`).innerHTML = "Position: Second Baseman <img class=svg src=./billed-cap.svg />";
-    }
-    if (roster[i].primaryPosition === '1B') {
-        document.getElementById(`${roster[i].id}`).innerHTML = "Position: First Baseman <img class=svg src=./billed-cap.svg />";
-    }
-    if (roster[i].primaryPosition === 'CF') {
-        document.getElementById(`${roster[i].id}`).innerHTML = "Position: Center Fielder <img class=svg src=./baseball-glove.svg />";
-    }
-    if (roster[i].primaryPosition === 'SS') {
-        document.getElementById(`${roster[i].id}`).innerHTML = "Position: Shortstop <img class=svg src=./billed-cap.svg />";
-    }
-    if (roster[i].primaryPosition === 'C') {
-        document.getElementById(`${roster[i].id}`).innerHTML = "Position: Catcher <img class=svg src=./baseball-glove.svg />";
-    }
-    if (roster[i].primaryPosition === '3B') {
-        document.getElementById(`${roster[i].id}`).innerHTML = "Position: Third Baseman <img class=svg src=./billed-cap.svg />";
-    }
-};
-
-function flipCard(flipped, divID) {
-   
-    if (flipped) {
-        document.getElementById(`${divID}`).style = "display: none"
-        document.getElementById(`${divID}Flip`).style = "display: block"
-    } else if (!flipped) {       
-        document.getElementById(`${divID}`.slice(0, -4)).style = "display: block"
-        document.getElementById(`${divID}`).style = "display: none"
-    }
-};
-
-for (let i = 0; i< roster.length; i++) {
-    document.getElementById(i).addEventListener('click', () => flipCard(flipped = true, i))
-    document.getElementById(`${i}Flip`).addEventListener('click', () => flipCard(flipped = false, `${i}Flip`))
+  if (roster[i].primaryPosition === "P") {
+    document.getElementById(`${roster[i].id}`).innerHTML =
+      "Position: Pitcher <box-icon name='baseball' type='solid' animation='flashing' rotate='90' ></box-icon>";
+  }
+  if (roster[i].primaryPosition === "LF") {
+    document.getElementById(`${roster[i].id}`).innerHTML =
+      "Position: Left Fielder <img class=svg src=./baseball-glove.svg />";
+  }
+  if (roster[i].primaryPosition === "RF") {
+    document.getElementById(`${roster[i].id}`).innerHTML =
+      "Position: Right Fielder <img class=svg src=./baseball-glove.svg />";
+  }
+  if (roster[i].primaryPosition === "2B") {
+    document.getElementById(`${roster[i].id}`).innerHTML =
+      "Position: Second Baseman <img class=svg src=./billed-cap.svg />";
+  }
+  if (roster[i].primaryPosition === "1B") {
+    document.getElementById(`${roster[i].id}`).innerHTML =
+      "Position: First Baseman <img class=svg src=./billed-cap.svg />";
+  }
+  if (roster[i].primaryPosition === "CF") {
+    document.getElementById(`${roster[i].id}`).innerHTML =
+      "Position: Center Fielder <img class=svg src=./baseball-glove.svg />";
+  }
+  if (roster[i].primaryPosition === "SS") {
+    document.getElementById(`${roster[i].id}`).innerHTML =
+      "Position: Shortstop <img class=svg src=./billed-cap.svg />";
+  }
+  if (roster[i].primaryPosition === "C") {
+    document.getElementById(`${roster[i].id}`).innerHTML =
+      "Position: Catcher <img class=svg src=./baseball-glove.svg />";
+  }
+  if (roster[i].primaryPosition === "3B") {
+    document.getElementById(`${roster[i].id}`).innerHTML =
+      "Position: Third Baseman <img class=svg src=./billed-cap.svg />";
+  }
 }
 
+function flipCard(flipped, divID) {
+  if (flipped) {
+    document.getElementById(`${divID}`).style = "display: none";
+    document.getElementById(`${divID}Flip`).style = "display: block";
+  } else if (!flipped) {
+    document.getElementById(`${divID}`.slice(0, -4)).style = "display: block";
+    document.getElementById(`${divID}`).style = "display: none";
+  }
+}
+
+for (let i = 0; i < roster.length; i++) {
+  document
+    .getElementById(i)
+    .addEventListener("click", () => flipCard((flipped = true), i));
+  document
+    .getElementById(`${i}Flip`)
+    .addEventListener("click", () => flipCard((flipped = false), `${i}Flip`));
+}
