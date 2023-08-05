@@ -1,6 +1,6 @@
 html,
 body {
-  background-color: #014141;
+  background-color: #12284B;
   margin: 0;
   padding: 0;
 }
@@ -8,6 +8,10 @@ body {
 .container {
   display: flex;
   flex-wrap: wrap;
+}
+
+.title {
+  color: #FFC52F;
 }
 
 .cardLayer1 {
@@ -20,6 +24,11 @@ body {
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  box-shadow: 8.0px 16.0px 16.0px hsl(0deg 0% 0% / 0.25);
+  flex-shrink: 1;
+}
+
+.cardLayer1:focus {
   transition: transform 1s;
   transform-style: preserve-3d;
   perspective: 1000;
@@ -40,6 +49,11 @@ body {
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  box-shadow: 8.0px 16.0px 16.0px hsl(0deg 0% 0% / 0.25);
+  flex-shrink: 1;
+}
+
+.cardLayer1Flip:focus {
   transition: transform 1s;
   transform-style: preserve-3d;
   perspective: 1000;

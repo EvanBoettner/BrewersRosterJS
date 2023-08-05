@@ -1,52 +1,44 @@
+
+//Fetch the roster from data.json
 let roster = await fetch("./data.json").then((res) => {
   return res.json();
 });
 
-console.log(`Roster: ${roster}`);
+//state to manage whether the card is flipped
 var flipped = false;
+
+//state to filter by user input
 var searchValue = "";
 
-const container = document.querySelector(".container");
 const playerContainer = document.querySelector(".players");
-// const playerList = document.getElementById("playerList");
 const search = document.getElementById("search");
 
-// roster.forEach((player, index) => {
-//   playerList[index] = new Option(player.firstName + player.lastName, index);
-// });
-
-// search.addEventListener("change", (e) => {});
-
 search.addEventListener("input", (e) => {
+  //set searchValue equal to user input
   searchValue = e.target.value;
   search.value = searchValue;
   if (searchValue.length === 0) {
+    //if search field is empty show all players
     for (let i = 0; i < roster.length; i++) {
-      document.getElementById(i).style = "display: block";
+      document.getElementById(i).style.display = "";
     }
   }
-  if (e.target.value) {
+  if (searchValue.length > 0) {
+    //matching searchvalue to player name, if a character is not in the player name it will return -1 and set display to none
     for (let i = 0; i < roster.length; i++) {
-      if (
-        !e.target.value
-          .toLowerCase()
-          .includes(roster[i].firstName.toLowerCase()) ||
-        !e.target.value.toLowerCase().includes(roster[i].lastName.toLowerCase())
-      ) {
-        document.getElementById(i).style = "display: none";
+      if (roster[i].firstName.toLowerCase().indexOf(searchValue.toLowerCase()) > -1) {
+        document.getElementById(i).style.display = "";
+      } else {
+        document.getElementById(i).style.display = "none";
       }
-      if (
-        e.target.value
-          .toLowerCase()
-          .includes(roster[i].firstName.toLowerCase()) ||
-        e.target.value.toLowerCase().includes(roster[i].lastName.toLowerCase())
-      ) {
-        document.getElementById(i).style = "display: block";
+      if (roster[i].lastName.toLowerCase().indexOf(searchValue.toLowerCase()) > -1) {
+        document.getElementById(i).style.display = "";
       }
     }
   }
 });
 
+//map player info to playerContainer 
 playerContainer.innerHTML = roster
   .map(
     (player, index) =>
@@ -88,11 +80,11 @@ playerContainer.innerHTML = roster
                             </div>
                             <div class="cardPosition2">
                                 <h3>Bat Side: </h3> 
-                                <h3>${player.batSide}</h3>
+                                <h3 id="${index}bat">${player.batSide}</h3>
                             </div>
                             <div class="cardPosition2">
                                 <h3>Throw Side: </h3> 
-                                <h3>${player.throwSide}</h3>
+                                <h3 id="${index}throw">${player.throwSide}</h3>
                             </div>
                             <div class="cardPosition2">
                                 <h3>Birth Country: </h3> 
@@ -149,15 +141,27 @@ for (let i = 0; i < roster.length; i++) {
     document.getElementById(`${roster[i].id}`).innerHTML =
       "Position: Third Baseman <img class=svg src=./billed-cap.svg />";
   }
+  if (roster[i].batSide === "R") {
+    document.getElementById(`${i}bat`).innerHTML = "Right"
+  }
+  if (roster[i].batSide === "L") {
+    document.getElementById(`${i}bat`).innerHTML = "Left"
+  }
+  if (roster[i].throwSide === "R") {
+    document.getElementById(`${i}throw`).innerHTML = "Right"
+  }
+  if (roster[i].throwSide === "L") {
+    document.getElementById(`${i}throw`).innerHTML = "Left"
+  }
 }
 
 function flipCard(flipped, divID) {
-  if (flipped) {
-    document.getElementById(`${divID}`).style = "display: none";
-    document.getElementById(`${divID}Flip`).style = "display: block";
-  } else if (!flipped) {
-    document.getElementById(`${divID}`.slice(0, -4)).style = "display: block";
-    document.getElementById(`${divID}`).style = "display: none";
+  if (flipped) { //if the card is flipped set display to none and show the additonal stats
+    document.getElementById(`${divID}`).style.display = "none";
+    document.getElementById(`${divID}Flip`).style.display = "flex";
+  } else if (!flipped) { //if the card is flipped back set display to none and show the player side
+    document.getElementById(`${divID}`.slice(0, -4)).style.display = "flex";
+    document.getElementById(`${divID}`).style.display = "none";
   }
 }
 
